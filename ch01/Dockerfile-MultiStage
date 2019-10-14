@@ -1,0 +1,11 @@
+# Stage1 go build
+FROM golang:1.13.1-alpine3.10 as builder
+COPY ./main.go ./
+RUN go build -o /go-app ./main.go
+
+# Stage2 execute go binary
+FROM alpine:3.10
+EXPOSE 8080
+COPY --from=builder /go-app .
+USER nobody
+ENTRYPOINT ["./go-app"]
